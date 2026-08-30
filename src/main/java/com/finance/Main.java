@@ -163,7 +163,11 @@ public class Main extends Application {
         TableColumn<Transaction, String> category = new TableColumn<>("หมวดหมู่");
         category.setCellValueFactory(x -> x.getValue().categoryProperty());
         TableColumn<Transaction, String> amount = new TableColumn<>("จำนวนเงิน");
-        amount.setCellValueFactory(x -> x.getValue().amountProperty());
+        amount.setCellValueFactory(x ->
+            new javafx.beans.property.SimpleStringProperty(
+                money(x.getValue().getAmount())
+            )
+        );
         TableColumn<Transaction, String> desc = new TableColumn<>("รายละเอียด");
         desc.setCellValueFactory(x -> x.getValue().descriptionProperty());
         
@@ -222,7 +226,7 @@ public class Main extends Application {
         delete.setOnAction(e -> {
             Transaction selected = manageTable.getSelectionModel().getSelectedItem();
             if (selected != null) {
-                db.deleteTransaction(selected.id);
+                db.deleteTransaction(selected.getId());
                 refresh();
                 new Alert(Alert.AlertType.INFORMATION, "ลบรายการเรียบร้อยแล้ว").showAndWait();
             } else {
